@@ -1,0 +1,27 @@
+{
+  "name": "minube/leanplum-php",
+  "homepage": "http://minube.com",
+  "description": "Leanplum SDK for PHP - Use Leanplum in your PHP project",
+  "keywords": [
+    "leanplum",
+    "sdk"
+  ],
+  "type": "library",
+  "license": "Apache-2.0",
+  "authors": [
+    {
+      "name": "Minube",
+      "homepage": "http://www.minube.com"
+    }
+  ],
+  "autoload": {
+    "psr-4": {
+      "Leanplum\\": "src/"
+    }
+  },
+  "require": {
+    "php": ">=5.3.3",
+    "guzzle/guzzle": "~3.9"
+  }
+}
+
