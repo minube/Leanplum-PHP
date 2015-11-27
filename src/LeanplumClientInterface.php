@@ -8,8 +8,8 @@ interface LeanplumClientInterface
 {
     /**
      * @param $method
-     * @param Message\Event|null $arguments
+     * @param Message\Request\RequestAbstract $arguments
      * @return \Guzzle\Http\Message\Response
      */
-    public function __call($method, Message\Event $arguments = null);
+    public function __call($method, $arguments = null);
 }

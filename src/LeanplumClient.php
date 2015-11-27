@@ -9,7 +9,7 @@ use Guzzle\Http\Client;
 class LeanplumClient implements LeanplumClientInterface
 {
     /** @var string */
-    const LEANPLUM_URL = 'https://www.leanplum.com/api';
+    const LEANPLUM_URL = 'https://www.leanplum.com/api?';
 
     /** @var string */
     const API_VERSION = "1.0.6";
@@ -39,7 +39,6 @@ class LeanplumClient implements LeanplumClientInterface
      * @param string $clientKey
      * @param string $appId
      * @param string $apiVersion
-     * @internal param null|string $clientKey
      */
     public function __construct($clientKey = null, $appId = null, $apiVersion = null)
     {
@@ -86,42 +85,24 @@ class LeanplumClient implements LeanplumClientInterface
 
     /**
      * @param $method
-     * @param Message\Event|null $arguments
+     * @param Message\Request\RequestAbstract|null $arguments
      * @return \Guzzle\Http\Message\Response
      */
-    public function __call($method, Message\Event $arguments = null)
+    public function __call($method, $arguments = null)
     {
+        $message = array_pop($arguments);
         if (!in_array($method, $this->validMethods())) {
             throw new \InvalidArgumentException("Invalid method");
         }
 
-        $requestBody = array(
-            'action' => $method,
+        $uriParams = array(
             'appId' => $this->appId,
             'clientKey' => $this->clientKey,
             'apiVersion' => $this->apiVersion,
         );
-        $requestBody = array_merge((array) $arguments->format(), $requestBody);
-        $request = $this->getClient()->post(null, null, $requestBody);
-        return $request->send();
-    }
 
-    /**
-     * @param Message\Event $event
-     * @return Message\Response
-     */
-    public function track(Message\Event $event)
-    {
-        $request = $this->getClient()->post(
-            null,
-            null,
-            array(
-                'action' => __METHOD__,
-                'appId' => $this->appId,
-                'clientKey' => $this->clientKey,
-                'apiVersion' => $this->apiVersion,
-            )
-        );
+        $url = self::LEANPLUM_URL . http_build_query($uriParams) .
+        $request = $this->getClient()->post($url, null, json_encode($message->format()));
         return $request->send();
     }
 
@@ -132,7 +113,7 @@ class LeanplumClient implements LeanplumClientInterface
     protected function getClient()
     {
         if (null === $this->client) {
-            $this->client = new Client(self::LEANPLUM_URL);
+            $this->client = new Client();
         }
         return $this->client;
     }
