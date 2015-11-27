@@ -101,7 +101,7 @@ class LeanplumClient implements LeanplumClientInterface
             'apiVersion' => $this->apiVersion,
         );
 
-        $url = self::LEANPLUM_URL . http_build_query($uriParams) .
+        $url = self::LEANPLUM_URL . http_build_query($uriParams);
         $request = $this->getClient()->post($url, null, json_encode($message->format()));
         return $request->send();
     }
