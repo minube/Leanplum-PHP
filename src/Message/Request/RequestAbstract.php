@@ -7,19 +7,6 @@ namespace Leanplum\Message\Request;
 abstract class RequestAbstract
 {
     /**
-     * @param string $name
-     * @param string $value
-     * @return $this
-     */
-    public function set($name, $value)
-    {
-        if (property_exists(get_class(), $name)) {
-            $this->{$name} = $value;
-        }
-        return $this;
-    }
-
-    /**
      * @param string $method
      * @param mixed|null $arguments
      * @return bool

@@ -97,12 +97,19 @@ class LeanplumClient implements LeanplumClientInterface
 
         $uriParams = array(
             'appId' => $this->appId,
+            'action' => $message->getAction(),
             'clientKey' => $this->clientKey,
             'apiVersion' => $this->apiVersion,
+            'time' => time(),
         );
 
         $url = self::LEANPLUM_URL . http_build_query($uriParams);
-        $request = $this->getClient()->post($url, null, json_encode($message->format()));
+        $request = $this->getClient()->post(
+            $url,
+            array('Content-Type' => 'application/json')
+        );
+
+        $request->setBody(json_encode($message->format()));
         return $request->send();
     }
 
